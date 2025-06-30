@@ -1,11 +1,45 @@
-<h1>Hi! Please confirm your email!</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation de votre email - Terrine Bellecour</title>
+</head>
+<body style="background-color: #0a0a0a; color: #f9f9f9; font-family: Arial, sans-serif; padding: 20px;">
 
-<p>
-    Please confirm your email address by clicking the following link: <br><br>
-    <a href="{{ signedUrl|raw }}">Confirm my Email</a>.
-    This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
-</p>
+<div style="max-width: 600px; margin: auto; background-color: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 30px;">
 
-<p>
-    Cheers!
-</p>
+    <h1 style="text-align: center; color: #facc15; margin-bottom: 20px;">
+        🎬 Bienvenue chez Terrine Bellecour
+    </h1>
+
+    <p style="font-size: 16px; line-height: 1.6;">
+        Bonjour,
+    </p>
+
+    <p style="font-size: 16px; line-height: 1.6;">
+        Merci de votre inscription sur <strong style="color: #facc15;">Terrine Bellecour</strong>.<br>
+        Veuillez confirmer votre adresse email en cliquant sur le bouton ci-dessous :
+    </p>
+
+    <div style="text-align: center; margin: 30px 0;">
+        <a href="{{ signedUrl|raw }}"
+           style="background-color: #facc15; color: #1a1a1a; padding: 12px 24px; text-decoration: none;
+                      border-radius: 6px; font-weight: bold; display: inline-block;">
+            ✅ Confirmer mon adresse email
+        </a>
+    </div>
+
+    <p style="font-size: 14px; line-height: 1.6; color: #d4d4d4;">
+        ⚠️ Ce lien expirera dans {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.<br>
+        Si vous n'avez pas demandé cette inscription, vous pouvez ignorer cet email.
+    </p>
+
+    <hr style="border: none; border-top: 1px solid #333; margin: 30px 0;">
+
+    <p style="font-size: 14px; text-align: center; color: #888;">
+        🍿 Terrine Bellecour - Votre cinéma de quartier à Lyon Bellecour
+    </p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des salles{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen bg-neutral-900 py-12">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-3xl text-white font-bold mb-8">Liste des <span class="text-yellow-400">salles</span></h1>
+
+            <div class="flex justify-end mb-4">
+                <a href="{{ path('app_salle_create') }}" class="bg-yellow-400 text-neutral-900 font-semibold px-4 py-2 rounded hover:bg-yellow-500 transition">
+                    + Nouvelle salle
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for salle in salles %}
+                    <div class="bg-neutral-800 border border-neutral-700 rounded-lg p-6">
+                        <h2 class="text-xl text-yellow-400 font-semibold mb-2">Salle n°{{ salle.numero }}</h2>
+                        <p class="text-neutral-300 mb-4">Nombre de places : {{ salle.place }}</p>
+                        <div class="flex gap-3">
+                            <a href="{{ path('app_salle_show', {id: salle.id}) }}" class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
+                                Voir
+                            </a>
+                            <a href="{{ path('app_salle_edit', {id: salle.id}) }}" class="text-sm bg-yellow-500 hover:bg-yellow-600 text-neutral-900 px-3 py-1 rounded">
+                                Modifier
+                            </a>
+                            <form method="post" action="{{ path('app_salle_delete', {id: salle.id}) }}" >
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ salle.id) }}">
+                                <button class="text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                                    Supprimer
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-neutral-400">Aucune salle enregistrée.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

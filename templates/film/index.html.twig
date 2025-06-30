@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos Films - Terrine Bellecour{% endblock %}
+
+{% block body %}
+    <div class="bg-neutral-900 text-white py-12 min-h-screen">
+        <div class="max-w-7xl mx-auto px-6">
+            <h1 class="text-4xl font-bold text-yellow-400 mb-8">Nos Films</h1>
+            <p class="mb-6">Découvrez la programmation actuelle de Terrine Bellecour et réservez vos places.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {% for film in films %}
+                    <div class="bg-neutral-800 rounded-lg overflow-hidden shadow-md hover:scale-105 transition">
+                        <img src="{{ vich_uploader_asset(film.image, "imageFile") }}" alt="{{ film.name }}" class="w-full h-64 ">
+                        <div class="p-4">
+                            <h2 class="text-2xl font-semibold text-yellow-300">{{ film.name }}</h2>
+                            <p class="mt-2 text-sm text-neutral-300">{{ film.resume|slice(0, 100) ~ '...' }}</p>
+                            <a href="{{ path('app_film_show', {id: film.id}) }}" class="mt-4 inline-block text-yellow-400 hover:underline">Voir le détail</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>Aucun film disponible pour le moment.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ film.name }} - Terrine Bellecour{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen bg-neutral-900 text-white flex items-center justify-center">
+        <div class="max-w-3xl w-full p-8 bg-neutral-800 rounded-lg border border-neutral-700 shadow-lg">
+            <h1 class="text-3xl font-bold text-yellow-400 mb-4">{{ film.name }}</h1>
+
+            <p class="mb-2"><span class="text-yellow-400">Résumé :</span> {{ film.resume }}</p>
+            <p class="mb-2"><span class="text-yellow-400">Durée :</span> {{ film.duration }} minutes</p>
+            <p class="mb-6"><span class="text-yellow-400">Francophone :</span> {{ film.francophone ? 'Oui' : 'Non' }}</p>
+
+            {% if film.image %}
+                <div class="mb-6">
+                    <img src="{{ vich_uploader_asset(film.image, "imageFile") }}" alt="{{ film.name }}" class="rounded-md shadow-lg">
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

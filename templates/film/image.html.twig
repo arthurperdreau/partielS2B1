@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une image - {{ film.name }}{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen bg-neutral-900 flex items-center justify-center">
+        <div class="w-full max-w-md bg-neutral-800 rounded-lg border border-neutral-700 shadow-lg p-8">
+            <h1 class="text-2xl font-bold text-white text-center mb-6">
+                Ajouter une <span class="text-yellow-400">image</span> au film
+            </h1>
+
+            {{ form_start(form, {'attr': {'class': 'flex flex-col gap-4'}}) }}
+
+            {{ form_row(form.imageFile, {
+                'attr': {
+                    class: 'w-full px-4 py-2 rounded-md bg-neutral-700 border border-neutral-600 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-yellow-400'
+                }
+            }) }}
+
+            <button type="submit" class="w-full bg-yellow-400 text-neutral-900 font-semibold py-2 rounded-md hover:bg-yellow-500 transition">
+                Ajouter l'image
+            </button>
+
+            {{ form_end(form) }}
+
+            <div class="mt-4">
+                <a href="{{ path('app_film_show', {'id': film.id}) }}" class="w-full block bg-neutral-700 hover:bg-neutral-600 text-white text-center font-semibold py-2 rounded-md transition">
+                    ← Retour au film
+                </a>
+            </div>
+
+            <div class="mt-6">
+                <h2 class="text-xl text-yellow-400 mb-2">Images existantes :</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    {% if film.image %}
+                        <div class="relative">
+                            <img src="{{ vich_uploader_asset(film.image, 'imageFile') }}" alt="{{ film.name }}" class="rounded-md">
+                            <a href="{{ path('remove_image', {'id': film.image.id}) }}" class="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 rounded">
+                                Supprimer
+                            </a>
+                        </div>
+                    {% else %}
+                        <p class="col-span-2 text-neutral-400">Aucune image disponible.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

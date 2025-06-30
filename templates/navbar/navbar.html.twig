@@ -1,0 +1,24 @@
+<div class="bg-neutral-900 border-b border-neutral-700">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+
+        <!-- LOGO -->
+        <div class="flex items-center gap-4">
+            <a href="{{ path('app_home') }}">
+                <img src="/imagesSite/logo.png" alt="Terrine Bellecour" class="w-12 h-12 rounded-lg text-white">
+            </a>
+        </div>
+
+        <nav class="flex gap-8 text-sm uppercase font-semibold">
+            <a href="{{ path('app_home') }}" class="hover:text-yellow-400 text-white">Films</a>
+            <a href="{{ path('app_home') }}" class="hover:text-yellow-400 text-white">Séances</a>
+            <a href="{{ path('app_login') }}" class="hover:text-yellow-400 text-white">Se connecter</a>
+        </nav>
+
+        <div class="flex items-center gap-6">
+            <a href="{{ path('app_login') }}" class="flex items-center gap-2 hover:text-yellow-400 text-white">
+                <i class="ph ph-user-circle text-2xl"></i>
+                <span class="text-xs font-semibold uppercase">Le Club</span>
+            </a>
+        </div>
+    </div>
+</div>
