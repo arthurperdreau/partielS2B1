@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen bg-neutral-950 text-neutral-100 flex items-center justify-center">
+        <div class="max-w-5xl w-full px-6 py-10">
+            <h1 class="text-4xl font-bold text-center text-yellow-500 mb-10">
+                Dashboard Administrateur
+            </h1>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <a href="{{ path('app_home') }}" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 hover:bg-neutral-800 transition">
+                    <h2 class="text-2xl font-semibold text-yellow-400 mb-2">📽️ Gestion des Films</h2>
+                    <p class="text-neutral-300">Ajouter, modifier ou supprimer les films de l'affiche.</p>
+                </a>
+
+                <a href="{{ path('app_seance') }}" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 hover:bg-neutral-800 transition">
+                    <h2 class="text-2xl font-semibold text-yellow-400 mb-2">📅 Gestion des Séances</h2>
+                    <p class="text-neutral-300">Planifier les séances de cinéma.</p>
+                </a>
+
+                <a href="{{ path('app_horaire') }}" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 hover:bg-neutral-800 transition">
+                    <h2 class="text-2xl font-semibold text-yellow-400 mb-2">⏰ Gestion des Horaires</h2>
+                    <p class="text-neutral-300">Définir les horaires des séances.</p>
+                </a>
+                <a href="{{ path('app_user') }}" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 hover:bg-neutral-800 transition">
+                    <h2 class="text-2xl font-semibold text-yellow-300 mb-2">👤 Gestion des Utilisateurs</h2>
+                    <p class="text-gray-300">Administrer les comptes utilisateurs.</p>
+                </a>
+            </div>
+
+
+        </div>
+        </div>
+    </div>
+{% endblock %}

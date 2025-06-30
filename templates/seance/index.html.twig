@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des séances{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen bg-neutral-900 py-12">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-3xl text-white font-bold mb-8">Liste des <span class="text-yellow-400">séances</span></h1>
+
+            <div class="flex justify-end mb-4">
+                <a href="{{ path('app_seance_create') }}" class="bg-yellow-400 text-neutral-900 font-semibold px-4 py-2 rounded hover:bg-yellow-500 transition">
+                    + Nouvelle séance
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for seance in seances %}
+                    <div class="bg-neutral-800 border border-neutral-700 rounded-lg p-6">
+                        <h2 class="text-xl text-yellow-400 font-semibold mb-2">{{ seance.film.name }}</h2>
+                        <p class="text-neutral-300 mb-1">Salle : {{ seance.salle.numero }}</p>
+                        <p class="text-neutral-300 mb-1">Date : {{ seance.date|date('d/m/Y') }}</p>
+                        <p class="text-neutral-300 mb-1">Horaire : {{ seance.horaire.horaire ? seance.horaire.horaire|date('H:i') : '—' }}</p>
+                        <p class="text-neutral-300 mb-4">Version : {{ seance.version == 'VF' ? 'Version Française (VF)' : 'Version Originale (VO)' }}</p>
+
+                        <div class="flex gap-3">
+                            <a href="{{ path('app_seance_show', {id: seance.id}) }}" class="text-sm bg-yellow-400 hover:bg-yellow-500 px-3 py-1 rounded font-semibold">
+                                Voir
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-neutral-400">Aucune séance enregistrée.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
