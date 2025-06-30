@@ -40,4 +40,22 @@ class SeanceRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findExistingSeance($salle, $date, $horaire, ?Seance $excludeSeance = null): ?Seance
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->andWhere('s.salle = :salle')
+            ->andWhere('s.date = :date')
+            ->andWhere('s.horaire = :horaire')
+            ->setParameter('salle', $salle)
+            ->setParameter('date', $date)
+            ->setParameter('horaire', $horaire);
+
+        if ($excludeSeance) {
+            $qb->andWhere('s != :excludeSeance')
+                ->setParameter('excludeSeance', $excludeSeance);
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
 }

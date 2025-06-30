@@ -24,7 +24,7 @@ class SeanceForm extends AbstractType
             ])
             ->add('salle', EntityType::class, [
                 'class' => Salle::class,
-                'choice_label' => 'id',
+                'choice_label' => 'numero',
             ])
             ->add('horaire', EntityType::class, [
                 'class' => Horaire::class,

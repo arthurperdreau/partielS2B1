@@ -21,6 +21,14 @@ final class SeanceController extends AbstractController
         ]);
     }
 
+    #[Route('/seance/{id}', name: 'app_seance_show',priority: -1)]
+    public function show(Seance $seance): Response
+    {
+        return $this->render('seance/show.html.twig', [
+            'seance' => $seance,
+        ]);
+    }
+
     #[Route('/seance/nouveau', name: 'app_seance_create', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -33,18 +41,50 @@ final class SeanceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $film = $seance->getFilm();
+            $date = $seance->getDate();
+            $horaireEntity = $seance->getHoraire();
+            $horaire = $horaireEntity ? $horaireEntity->getHoraire() : null;
+            $salle = $seance->getSalle();
 
+            if (!$date instanceof \DateTimeInterface || !$horaire instanceof \DateTimeInterface) {
+                return $this->redirectToRoute('app_seance_create');
+            }
+
+            $jour = (int) $date->format('N');
+            $heure = (int) $horaire->format('H');
+            $minute = (int) $horaire->format('i');
+
+            //lundi = 1 ... dimanche = 7
+            if ($jour >= 1 && $jour <= 6) {
+                // horaire doit être >= 10h15 entre lundi et samedi
+                if ($heure < 10 || ($heure === 10 && $minute < 15)) {
+                    return $this->redirectToRoute('app_seance_create');
+                }
+            } elseif ($jour === 7) {
+                //seance autorisée que le matin donc avant 12h
+                if ($heure >= 12) {
+                    return $this->redirectToRoute('app_seance_create');
+                }
+            } else {
+                return $this->redirectToRoute('app_seance_create');
+            }
+
+            //règle pour les films non francophones en vf que le matin
+            $film = $seance->getFilm();
             if ($film && !$film->isFrancophone() && $seance->getVersion() === 'VF') {
-                $horaire = $seance->getHoraire();
-                if ($horaire && $horaire->getHoraire() instanceof \DateTimeInterface) {
-                    $heure = (int) $horaire->getHoraire()->format('H');
-                    if ($heure >= 12) {
-                        return $this->redirectToRoute('app_seance_create');
-                    }
+                if ($heure >= 12) {
+                    return $this->redirectToRoute('app_seance_create');
                 }
             }
 
+            //vérification qu'il n'y a pas déjà une séance à la même date et horaire dans cette salle
+            $seanceExistante = $entityManager->getRepository(Seance::class)
+                ->findExistingSeance($salle, $date, $horaireEntity);
+
+            if ($seanceExistante) {
+                $this->addFlash('error', 'Une séance existe déjà dans cette salle à cette date et à cet horaire.');
+                return $this->redirectToRoute('app_seance_create');
+            }
 
             $entityManager->persist($seance);
             $entityManager->flush();
@@ -59,14 +99,6 @@ final class SeanceController extends AbstractController
     }
 
 
-    #[Route('/seance/{id}', name: 'app_seance_show',)]
-    public function show(Seance $seance): Response
-    {
-        return $this->render('seance/show.html.twig', [
-            'seance' => $seance,
-        ]);
-    }
-
     #[Route('/seance/{id}/modifier', name: 'app_seance_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Seance $seance, EntityManagerInterface $entityManager): Response
     {
@@ -78,16 +110,49 @@ final class SeanceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $film = $seance->getFilm();
+            $date = $seance->getDate();
+            $horaireEntity = $seance->getHoraire();
+            $horaire = $horaireEntity ? $horaireEntity->getHoraire() : null;
+            $salle = $seance->getSalle();
 
-            if ($film && !$film->isFrancophone() && $seance->getVersion() === 'VF') {
-                $horaire = $seance->getHoraire();
-                if ($horaire && $horaire->getHoraire() instanceof \DateTimeInterface) {
-                    $heure = (int) $horaire->getHoraire()->format('H');
-                    if ($heure >= 12) {
-                        return $this->redirectToRoute('app_seance_create');
-                    }
+            if (!$date instanceof \DateTimeInterface || !$horaire instanceof \DateTimeInterface) {
+                $this->addFlash('error', 'La date et l\'horaire doivent être valides.');
+                return $this->redirectToRoute('app_seance_edit', ['id' => $seance->getId()]);
+            }
+
+            $jour = (int) $date->format('N');
+            $heure = (int) $horaire->format('H');
+            $minute = (int) $horaire->format('i');
+
+            //lundi = 1 ... dimanche = 7
+            if ($jour >= 1 && $jour <= 6) {
+                // horaire doit être >= 10h15 entre lundi et samedi
+                if ($heure < 10 || ($heure === 10 && $minute < 15)) {
+                    return $this->redirectToRoute('app_seance_edit', ['id' => $seance->getId()]);
                 }
+            } elseif ($jour === 7) {
+                //seance autorisée que le matin donc avant 12h
+                if ($heure >= 12) {
+                    return $this->redirectToRoute('app_seance_edit', ['id' => $seance->getId()]);
+                }
+            } else {
+                return $this->redirectToRoute('app_seance_edit', ['id' => $seance->getId()]);
+            }
+
+            //règle pour les films non francophones en vf que le matin
+            $film = $seance->getFilm();
+            if ($film && !$film->isFrancophone() && $seance->getVersion() === 'VF') {
+                if ($heure >= 12) {
+                    return $this->redirectToRoute('app_seance_edit', ['id' => $seance->getId()]);
+                }
+            }
+
+            //vérification qu'il n'y a pas déjà une seance à la meme date et meme horaire et meme salle
+            $seanceExistante = $entityManager->getRepository(Seance::class)
+                ->findExistingSeance($salle, $date, $horaireEntity, $seance);
+
+            if ($seanceExistante) {
+                return $this->redirectToRoute('app_seance_edit', ['id' => $seance->getId()]);
             }
 
             $entityManager->flush();
@@ -100,6 +165,8 @@ final class SeanceController extends AbstractController
             'form' => $form,
         ]);
     }
+
+
 
 
     #[Route('/seance/supprimer/{id}', name: 'app_seance_delete', methods: ['POST'])]

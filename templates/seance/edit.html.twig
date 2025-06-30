@@ -7,8 +7,15 @@
         <div class="w-full max-w-md bg-neutral-800 border border-neutral-700 rounded-lg p-8">
             <h1 class="text-2xl text-white font-bold mb-6">Modifier la <span class="text-yellow-400">séance</span></h1>
             <div class="mb-6 p-4 bg-yellow-200 text-yellow-900 rounded-md text-sm">
-                <strong>Note :</strong> Pour les films non-francophones, les séances en <em>Version Française (VF)</em> ne sont disponibles que le matin (avant 12h).
+
+                <strong>Note :</strong>
+                <ul class="list-disc list-inside space-y-1">
+                    <li>Le cinéma ouvre à <strong>10h15</strong> du lundi au samedi.</li>
+                    <li>Le dimanche, les séances ne sont possibles que le matin (avant 12h).</li>
+                    <li>Pour les films non-francophones, les séances en <em>Version Française (VF)</em> ne sont disponibles que le matin (avant 12h).</li>
+                </ul>
             </div>
+
 
             {{ form_start(form, {'attr': {'class': 'flex flex-col gap-4'}}) }}
             {{ form_row(form.film, {
@@ -27,6 +34,19 @@
                     'type': 'date'
                 }
             }) }}
+
+            {{ form_row(form.horaire, {
+                'attr': {
+                    'class': 'w-full px-4 py-2 rounded-md bg-neutral-700 border border-neutral-600 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400'
+                }
+            }) }}
+
+            {{ form_row(form.version, {
+                'attr': {
+                    'class': 'w-full px-4 py-2 rounded-md bg-neutral-700 border border-neutral-600 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400'
+                }
+            }) }}
+
             <button class="w-full bg-yellow-400 text-neutral-900 font-semibold py-2 rounded hover:bg-yellow-500 transition">
                 Modifier la séance
             </button>
