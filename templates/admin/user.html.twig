@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Utilisateurs{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen bg-neutral-950 text-neutral-100 px-6 py-10">
+        <h1 class="text-4xl font-bold text-yellow-500 mb-8 text-center">👥 Gestion des Utilisateurs</h1>
+
+        <div class="overflow-x-auto">
+            <table class="w-full border border-neutral-800 rounded-xl overflow-hidden">
+                <thead class="bg-neutral-900">
+                <tr>
+                    <th class="px-6 py-4 text-left border-b border-neutral-800">ID</th>
+                    <th class="px-6 py-4 text-left border-b border-neutral-800">Email</th>
+                    <th class="px-6 py-4 text-left border-b border-neutral-800">Rôle</th>
+                    <th class="px-6 py-4 text-left border-b border-neutral-800">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr class="hover:bg-neutral-800">
+                        <td class="px-6 py-4 border-b border-neutral-800">{{ user.id }}</td>
+                        <td class="px-6 py-4 border-b border-neutral-800">{{ user.email }}</td>
+                        <td class="px-6 py-4 border-b border-neutral-800">
+                            {% for role in user.roles %}
+                                {% if role == 'ROLE_USER' %}
+                                    <span class="bg-green-600 text-sm px-2 py-1 rounded-full">User</span>
+                                {% elseif role == 'ROLE_ADMIN' %}
+                                    <span class="bg-yellow-500 text-black text-sm px-2 py-1 rounded-full">Admin</span>
+                                {% endif %}
+                            {% endfor %}
+                            {% if user == app.user %}
+                                <span class="bg-blue-600 text-sm px-2 py-1 rounded-full">C'est vous</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 border-b border-neutral-800">
+                            {% if 'ROLE_ADMIN' not in user.roles %}
+                                <a href="{{ path('promote', {id: user.id}) }}"
+                                   class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition">
+                                    Promouvoir
+                                </a>
+                            {% else %}
+                                <a href="{{ path('demote', {id: user.id}) }}"
+                                   class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">
+                                    Rétrograder
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="px-6 py-4 text-center text-neutral-400">
+                            Aucun utilisateur trouvé.
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="flex justify-center mt-8">
+            <a href="{{ path('app_admin') }}"
+               class="bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-3 rounded-lg text-lg transition">
+                Retour au Dashboard
+            </a>
+        </div>
+    </div>
+{% endblock %}

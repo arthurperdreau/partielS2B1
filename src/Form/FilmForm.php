@@ -6,8 +6,10 @@ use App\Entity\Film;
 use App\Entity\Image;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Range;
 
 class FilmForm extends AbstractType
 {
@@ -17,8 +19,19 @@ class FilmForm extends AbstractType
             ->add('name')
             ->add('francophone')
             ->add('resume')
-            ->add('duration')
-        ;
+            ->add('duration', IntegerType::class, [
+                'label' => 'Durée (minutes)',
+                'attr' => [
+                    'min' => 0,
+                    'max' => 135,
+                ],
+                'constraints' => [
+                    new Range([
+                        'min' => 0,
+                        'max' => 135,
+                        'notInRangeMessage' => 'La durée doit être comprise entre {{ min }} et {{ max }} minutes.',
+                    ]),
+                ]]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

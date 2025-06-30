@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un horaire{% endblock %}
+
+{% block body %}
+    <div class="max-w-xl mx-auto p-8">
+        <h1 class="text-3xl font-bold mb-6 text-yellow-400">Ajouter un horaire</h1>
+
+        {{ form_start(form) }}
+        <div class="mb-4">
+            {{ form_label(form.horaire, null, {'label_attr': {'class': 'block text-yellow-400 mb-1'}}) }}
+            {{ form_widget(form.horaire, {'attr': {'class': 'w-full rounded px-3 py-2 bg-gray-700 text-white', 'type': 'time'}}) }}
+            {{ form_errors(form.horaire) }}
+        </div>
+
+        <button class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded text-black">Créer</button>
+        <a href="{{ path('app_horaire') }}" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-white ml-2">Annuler</a>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
