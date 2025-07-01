@@ -22,7 +22,7 @@ class Horaire
     /**
      * @var Collection<int, Seance>
      */
-    #[ORM\OneToMany(targetEntity: Seance::class, mappedBy: 'horaire')]
+    #[ORM\OneToMany(targetEntity: Seance::class, mappedBy: 'horaire', cascade: ['remove'], orphanRemoval: true)]
     private Collection $seances;
 
     public function __construct()

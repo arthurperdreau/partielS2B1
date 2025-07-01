@@ -242,5 +242,18 @@ final class SeanceController extends AbstractController
         ]);
     }
 
+    #[Route('/seances/all', name: 'app_all_seance', methods: ['GET'])]
+    public function allSeance(SeanceRepository $seanceRepository): Response
+    {
+        $now = new \DateTime();
+
+        $seances = $seanceRepository->findByAvenir();
+
+        return $this->render('seance/all.html.twig', [
+            'seances' => $seances,
+        ]);
+    }
+
+
 
 }

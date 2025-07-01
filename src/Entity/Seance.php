@@ -35,13 +35,13 @@ class Seance
     /**
      * @var Collection<int, Reservation>
      */
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'seance')]
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'seance', cascade: ['remove'], orphanRemoval: true)]
     private Collection $reservations;
 
     /**
      * @var Collection<int, Siege>
      */
-    #[ORM\OneToMany(targetEntity: Siege::class, mappedBy: 'seance',cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Siege::class, mappedBy: 'seance', cascade: ['persist','remove'], orphanRemoval: true)]
     private Collection $sieges;
 
 

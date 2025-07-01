@@ -80,4 +80,21 @@ class SeanceRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public  function findByAvenir():array
+    {
+        $now = new \DateTime();
+
+        return $this->createQueryBuilder('s')
+            ->join('s.horaire', 'h')
+            ->where('s.date > :today')
+            ->orWhere('s.date = :today AND h.horaire > :now')
+            ->setParameter('today', $now->format('Y-m-d'))
+            ->setParameter('now', $now->format('H:i:s'))
+            ->orderBy('s.date', 'ASC')
+            ->addOrderBy('h.horaire', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+    }
+
 }

@@ -11,7 +11,7 @@
         <!-- NAVIGATION -->
         <nav class="flex gap-8 text-sm uppercase font-semibold">
             <a href="{{ path('app_home') }}" class="hover:text-yellow-400 text-white">Films</a>
-            <a href="{{ path('app_home') }}" class="hover:text-yellow-400 text-white">Séances</a>
+            <a href="{{ path('app_all_seance') }}" class="hover:text-yellow-400 text-white">Séances à venir</a>
 
             {% if app.user %}
                 <a href="{{ path('app_logout') }}" class="hover:text-yellow-400 text-white">Se déconnecter</a>

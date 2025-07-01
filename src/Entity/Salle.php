@@ -24,7 +24,7 @@ class Salle
     /**
      * @var Collection<int, Seance>
      */
-    #[ORM\OneToMany(targetEntity: Seance::class, mappedBy: 'salle')]
+    #[ORM\OneToMany(targetEntity: Seance::class, mappedBy: 'salle', cascade: ['remove'], orphanRemoval: true)]
     private Collection $seances;
 
     public function __construct()

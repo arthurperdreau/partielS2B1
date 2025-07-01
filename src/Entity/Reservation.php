@@ -33,7 +33,7 @@ class Reservation
     /**
      * @var Collection<int, Siege>
      */
-    #[ORM\OneToMany(targetEntity: Siege::class, mappedBy: 'reservation')]
+    #[ORM\OneToMany(targetEntity: Siege::class, mappedBy: 'reservation', cascade: ['remove'], orphanRemoval: true)]
     private Collection $sieges;
 
     #[ORM\Column]
