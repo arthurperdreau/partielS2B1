@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réserver - Terrine Bellecour{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen flex flex-col items-center justify-start bg-neutral-900 py-10 px-4 relative">
+        <a href="{{ path('app_film_seance', {id: film.id}) }}"
+           class="absolute top-6 left-6 flex items-center text-yellow-400 hover:text-yellow-500 transition"
+           title="Retour aux séances de {{ film.name }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Retour
+        </a>
+
+        <h2 class="text-xl font-semibold text-white mb-2 text-center">
+            Choisissez vos sièges :
+        </h2>
+        <p class="text-neutral-400 mb-8 text-center max-w-md">
+            Cliquez sur les sièges disponibles pour les sélectionner. Les sièges barrés en rouge sont déjà réservés.
+        </p>
+
+        <div class="grid grid-cols-8 gap-4 justify-center max-w-md mx-auto mb-8">
+            {% for siege in sieges|sort((a,b) => a.numero <=> b.numero) %}
+                {% if siege.reserve %}
+                    <div
+                        class="text-neutral-600 cursor-not-allowed select-none flex justify-center"
+                        title="Place {{ siege.numero }}"
+                        aria-disabled="true"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="#9CA3AF" stroke-width="2">
+                            <rect x="4" y="7" width="16" height="10" rx="2" ry="2" fill="#4B5563" />
+                            <line x1="4" y1="7" x2="20" y2="17" stroke="#EF4444" stroke-width="3" />
+                            <line x1="20" y1="7" x2="4" y2="17" stroke="#EF4444" stroke-width="3" />
+                        </svg>
+                    </div>
+                {% else %}
+                    <label
+                        for="siege_{{ siege.id }}"
+                        class="cursor-pointer select-none text-neutral-400 hover:text-yellow-400 transition flex justify-center"
+                        title="Place {{ siege.numero }}"
+                    >
+                        <input
+                            type="checkbox"
+                            id="siege_{{ siege.id }}"
+                            name="sieges[]"
+                            value="{{ siege.id }}"
+                            class="hidden peer"
+                        />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 peer-checked:text-yellow-400 text-neutral-400" fill="currentColor" viewBox="0 0 24 24">
+                            <rect x="5" y="7" width="14" height="10" rx="2" ry="2" />
+                            <rect x="7" y="9" width="10" height="6" rx="1" ry="1" fill="none" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </label>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+
+        <button
+            id="checkout-button"
+            class="w-full max-w-md bg-yellow-400 text-neutral-900 font-semibold py-3 rounded-md hover:bg-yellow-500 transition"
+        >
+            Valider la réservation
+        </button>
+        {% if app.user %}
+        {% if "ROLE_ADMIN" in app.user.roles %}
+            <button id="btn-reserver-sans-payer"
+                    class="w-full max-w-md mt-4 border-2 border-yellow-400 text-yellow-400 font-semibold py-3 rounded-md hover:bg-yellow-400 hover:text-neutral-900 transition"
+            >
+                Réservation Admin
+            </button>
+
+        {% endif %}
+        {% endif %}
+
+        <script>
+
+        </script>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const stripe = Stripe('{{ stripe_public_key }}');
+
+            document.getElementById('checkout-button').addEventListener('click', function () {
+                const checkedSieges = Array.from(document.querySelectorAll('input[name="sieges[]"]:checked'))
+                    .map(cb => cb.value);
+
+                if (checkedSieges.length === 0) {
+                    alert('Veuillez sélectionner au moins un siège.');
+                    return;
+                }
+
+                fetch('{{ path('create_checkout_session', {'id': seance.id}) }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sieges: checkedSieges }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                            return;
+                        }
+                        return stripe.redirectToCheckout({ sessionId: data.id });
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        alert('Une erreur est survenue.');
+                    });
+            });
+            document.getElementById('btn-reserver-sans-payer').addEventListener('click', () => {
+                const selectedSeats = Array.from(document.querySelectorAll('input[name="sieges[]"]:checked'))
+                    .map(input => input.value);
+
+                if (selectedSeats.length === 0) {
+                    alert('Veuillez sélectionner au moins un siège.');
+                    return;
+                }
+
+                fetch('{{ path('app_reservation_admin', {id: seance.id}) }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: JSON.stringify({ sieges: selectedSeats })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message);
+                            window.location.href = "{{ path('app_seance') }}";
+                        } else {
+                            alert('Erreur: ' + (data.error || 'Erreur inconnue'));
+                        }
+                    })
+                    .catch(e => alert('Erreur réseau'));
+            });
+        });
+
+    </script>
+{% endblock %}

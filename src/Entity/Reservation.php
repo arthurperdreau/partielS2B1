@@ -36,6 +36,9 @@ class Reservation
     #[ORM\OneToMany(targetEntity: Siege::class, mappedBy: 'reservation')]
     private Collection $sieges;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
 
     public function __construct()
     {
@@ -96,18 +99,6 @@ class Reservation
         return $this;
     }
 
-    public function getSi�eges(): array
-    {
-        return $this->si�eges;
-    }
-
-    public function setSi�eges(array $si�eges): static
-    {
-        $this->si�eges = $si�eges;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Siege>
      */
@@ -134,6 +125,18 @@ class Reservation
                 $siege->setReservation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

@@ -4,21 +4,39 @@
         <!-- LOGO -->
         <div class="flex items-center gap-4">
             <a href="{{ path('app_home') }}">
-                <img src="/imagesSite/logo.png" alt="Terrine Bellecour" class="w-12 h-12 rounded-lg text-white">
+                <img src="/imagesSite/logo.png" alt="Terrine Bellecour" class="w-12 h-12 rounded-lg">
             </a>
         </div>
 
+        <!-- NAVIGATION -->
         <nav class="flex gap-8 text-sm uppercase font-semibold">
             <a href="{{ path('app_home') }}" class="hover:text-yellow-400 text-white">Films</a>
             <a href="{{ path('app_home') }}" class="hover:text-yellow-400 text-white">Séances</a>
-            <a href="{{ path('app_login') }}" class="hover:text-yellow-400 text-white">Se connecter</a>
+
+            {% if app.user %}
+                <a href="{{ path('app_logout') }}" class="hover:text-yellow-400 text-white">Se déconnecter</a>
+                {% if "ROLE_ADMIN" in app.user.roles %}
+                    <a href="{{ path('app_admin') }}" class="hover:text-yellow-400 text-white">Admin</a>
+                {% endif %}
+             {% else%}
+                 <a href="{{ path('app_login') }}" class="hover:text-yellow-400 text-white">Se connecter</a>
+            {% endif %}
         </nav>
 
+        <!-- PROFILE -->
         <div class="flex items-center gap-6">
-            <a href="{{ path('app_login') }}" class="flex items-center gap-2 hover:text-yellow-400 text-white">
-                <i class="ph ph-user-circle text-2xl"></i>
-                <span class="text-xs font-semibold uppercase">Le Club</span>
-            </a>
+            {% if app.user %}
+                <a href="{{ path('app_profile') }}" class="flex items-center gap-2 hover:text-yellow-400 text-white">
+                    <i class="bi bi-person-video text-2xl"></i>
+                    <span class="text-xs font-semibold uppercase">Profil</span>
+                </a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="flex items-center gap-2 hover:text-yellow-400 text-white">
+                    <i class="bi bi-person-circle text-2xl"></i>
+                    <span class="text-xs font-semibold uppercase">Se connecter</span>
+                </a>
+            {% endif %}
         </div>
+
     </div>
 </div>

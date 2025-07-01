@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\FilmRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -74,5 +75,14 @@ final class AdminController extends AbstractController
             $manager->flush();
         }
         return $this->redirectToRoute('app_user');
+    }
+
+    #[Route('/film', name: 'app_admin_film')]
+    public function getAllFilm(FilmRepository $filmRepository): Response
+    {
+        return $this->render('admin/film.html.twig', [
+            'controller_name' => 'FilmController',
+            'films' => $filmRepository->findAll(),
+        ]);
     }
 }

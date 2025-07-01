@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class HoraireController extends AbstractController
 {
-    #[Route('/horaires', name: 'app_horaire')]
+    #[Route('/admin/horaires', name: 'app_horaire')]
     public function index(HoraireRepository $horaireRepository): Response
     {
         if(!$this->getUser()){
@@ -27,7 +27,7 @@ final class HoraireController extends AbstractController
         ]);
     }
 
-    #[Route('/horaire/nouveau', name: 'app_horaire_create', methods: ['GET', 'POST'])]
+    #[Route('/admin/horaire/nouveau', name: 'app_horaire_create', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         if(!$this->getUser()){
@@ -54,7 +54,7 @@ final class HoraireController extends AbstractController
     }
 
 
-    #[Route('/horaire/{id}/modifier', name: 'app_horaire_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/horaire/{id}/modifier', name: 'app_horaire_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Horaire $horaire, EntityManagerInterface $entityManager): Response
     {
         if(!$this->getUser()){
@@ -78,7 +78,7 @@ final class HoraireController extends AbstractController
         ]);
     }
 
-    #[Route('/horaire/supprimer/{id}', name: 'app_horaire_delete', methods: ['POST'])]
+    #[Route('/admin/horaire/supprimer/{id}', name: 'app_horaire_delete', methods: ['POST'])]
     public function delete(Request $request, Horaire $horaire, EntityManagerInterface $entityManager): Response
     {
         if(!$this->getUser()){

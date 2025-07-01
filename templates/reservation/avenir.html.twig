@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les réservations à venir{% endblock %}
+
+{% block body %}
+    <div class="bg-neutral-900 min-h-screen p-8 text-white">
+        <h1 class="text-3xl font-bold text-yellow-400 mb-6">Les réservations à venir</h1>
+
+        {% if reservations is empty %}
+            <p class="text-neutral-300">Aucune réservation à venir.</p>
+        {% else %}
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-neutral-800 text-yellow-400">
+                    <tr>
+                        <th class="px-4 py-3 border border-neutral-700">Film</th>
+                        <th class="px-4 py-3 border border-neutral-700">Date</th>
+                        <th class="px-4 py-3 border border-neutral-700">Horaire</th>
+                        <th class="px-4 py-3 border border-neutral-700">Salle</th>
+                        <th class="px-4 py-3 border border-neutral-700">Tickets</th>
+                        <th class="px-4 py-3 border border-neutral-700">Prix</th>
+                        <th class="px-4 py-3 border border-neutral-700">Client</th>
+                        <th class="px-4 py-3 border border-neutral-700">Date de réservation</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for reservation in reservations %}
+                        <tr class="hover:bg-neutral-800 border-b border-neutral-700">
+                            <td class="px-4 py-3 border border-neutral-700">{{ reservation.seance.film.name }}</td>
+                            <td class="px-4 py-3 border border-neutral-700">{{ reservation.seance.date|date('d/m/Y') }}</td>
+                            <td class="px-4 py-3 border border-neutral-700">{{ reservation.seance.horaire.horaire|date('H:i') }}</td>
+                            <td class="px-4 py-3 border border-neutral-700">{{ reservation.seance.salle.numero }}</td>
+                            <td class="px-4 py-3 border border-neutral-700">{{ reservation.nombreTickets }}</td>
+                            <td class="px-4 py-3 border border-neutral-700">{{ reservation.prix }} €</td>
+                            <td class="px-4 py-3 border border-neutral-700">{{ reservation.owner.email }}</td>
+                            <td class="px-4 py-3 border border-neutral-700">{{ reservation.createdAt ? reservation.createdAt|date('d/m/Y H:i') : 'N/A' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+        <a href="{{ path('app_reservations_all') }}" class="mt-6 inline-block bg-yellow-400 hover:bg-yellow-500 text-neutral-900 font-semibold px-4 py-2 rounded transition">
+            Voir toutes les réservations
+        </a>
+    </div>
+{% endblock %}

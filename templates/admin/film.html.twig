@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Films - Terrine Bellecour{% endblock %}
+
+{% block body %}
+    <div class="bg-neutral-900 text-white py-12 min-h-screen">
+        <div class="max-w-7xl mx-auto px-6">
+            <h1 class="text-4xl font-bold text-yellow-400 mb-8">Gestion des Films</h1>
+
+            <a href="{{ path('app_film_create') }}" class="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded mb-8 inline-block">
+                + Ajouter un film
+            </a>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {% for film in films %}
+                    <div class="bg-neutral-800 rounded-lg overflow-hidden shadow-md hover:scale-105 transition">
+                        <img src="{{ vich_uploader_asset(film.image, 'imageFile') }}" alt="{{ film.name }}" class="w-full h-64 object-cover">
+                        <div class="p-4">
+                            <h2 class="text-2xl font-semibold text-yellow-300">{{ film.name }}</h2>
+                            <p class="mt-2 text-sm text-neutral-300">{{ film.resume|slice(0, 100) ~ '...' }}</p>
+
+                            <div class="flex justify-between mt-4">
+                                <a href="{{ path('app_film_show', {id: film.id}) }}"
+                                   class="text-yellow-400 hover:underline">
+                                    Voir le détail
+                                </a>
+                                <a href="{{ path('app_film_seance', {id: film.id}) }}"
+                                   class="bg-yellow-400 text-neutral-900 font-semibold px-3 py-2 rounded-md hover:bg-yellow-500 transition">
+                                    Réserver
+                                </a>
+                            </div>
+
+                            <div class="flex justify-between space-x-2 mt-4">
+                                <a href="{{ path('app_film_edit', {id: film.id}) }}"
+                                   class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md">
+                                    Modifier
+                                </a>
+                                <form method="post" action="{{ path('app_film_delete', {id: film.id}) }}"
+                                >
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ film.id) }}">
+                                    <button type="submit"
+                                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md">
+                                        Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>Aucun film disponible pour le moment.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

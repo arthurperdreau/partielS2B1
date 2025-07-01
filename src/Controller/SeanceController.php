@@ -15,17 +15,29 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class SeanceController extends AbstractController
 {
-    #[Route('/seances', name: 'app_seance')]
+    #[Route('/admin/seances', name: 'app_seance')]
     public function index(SeanceRepository $seanceRepository): Response
     {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_login');
+        }
         return $this->render('seance/index.html.twig', [
             'seances' => $seanceRepository->findAll(),
         ]);
     }
 
-    #[Route('/seance/{id}', name: 'app_seance_show',priority: -1)]
+    #[Route('/admin/seance/{id}', name: 'app_seance_show',priority: -1)]
     public function show(Seance $seance): Response
     {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_login');
+        }
         return $this->render('seance/show.html.twig', [
             'seance' => $seance,
         ]);
@@ -51,6 +63,18 @@ final class SeanceController extends AbstractController
             if (!$date instanceof \DateTimeInterface || !$horaire instanceof \DateTimeInterface) {
                 return $this->redirectToRoute('app_seance_create');
             }
+
+            $seanceDateTime = (new \DateTime())
+                ->setDate((int) $date->format('Y'), (int) $date->format('m'), (int) $date->format('d'))
+                ->setTime((int) $horaire->format('H'), (int) $horaire->format('i'));
+
+            // Date et heure actuelles
+            $now = new \DateTime();
+
+            if ($seanceDateTime < $now) {
+                return $this->redirectToRoute('app_seance_create');
+            }
+
 
             $jour = (int) $date->format('N');
             $heure = (int) $horaire->format('H');
@@ -84,7 +108,6 @@ final class SeanceController extends AbstractController
                 ->findExistingSeance($salle, $date, $horaireEntity);
 
             if ($seanceExistante) {
-                $this->addFlash('error', 'Une séance existe déjà dans cette salle à cette date et à cet horaire.');
                 return $this->redirectToRoute('app_seance_create');
             }
             if ($salle) {
@@ -97,8 +120,6 @@ final class SeanceController extends AbstractController
 
                 }
             }
-
-
 
             $entityManager->persist($seance);
             $entityManager->flush();
@@ -130,9 +151,19 @@ final class SeanceController extends AbstractController
             $salle = $seance->getSalle();
 
             if (!$date instanceof \DateTimeInterface || !$horaire instanceof \DateTimeInterface) {
-                $this->addFlash('error', 'La date et l\'horaire doivent être valides.');
                 return $this->redirectToRoute('app_seance_edit', ['id' => $seance->getId()]);
             }
+            $seanceDateTime = (new \DateTime())
+                ->setDate((int) $date->format('Y'), (int) $date->format('m'), (int) $date->format('d'))
+                ->setTime((int) $horaire->format('H'), (int) $horaire->format('i'));
+
+            // Date et heure actuelles
+            $now = new \DateTime();
+
+            if ($seanceDateTime < $now) {
+                return $this->redirectToRoute('app_seance_edit', ['id' => $seance->getId()]);
+            }
+
 
             $jour = (int) $date->format('N');
             $heure = (int) $horaire->format('H');

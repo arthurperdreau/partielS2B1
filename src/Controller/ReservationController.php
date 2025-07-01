@@ -6,6 +6,7 @@ use App\Entity\Reservation;
 use App\Entity\Seance;
 use App\Entity\Siege;
 use App\Form\ReservationForm;
+use App\Repository\ReservationRepository;
 use App\Repository\SeanceRepository;
 use App\Repository\SiegeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,6 +27,9 @@ final class ReservationController extends AbstractController
         Seance $seance,
         SiegeRepository $siegeRepository,
     ): Response {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
 
         return $this->render('reservation/reserver.html.twig', [
             'sieges' => $siegeRepository->findBy([ 'seance' => $seance ]),
@@ -97,6 +101,9 @@ final class ReservationController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager
     ): Response {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
         $siegesIds = explode(',', $request->query->get('sieges', ''));
 
         $sieges = $entityManager->getRepository(Siege::class)->findBy(['id' => $siegesIds]);
@@ -105,6 +112,7 @@ final class ReservationController extends AbstractController
         $reservation = new Reservation();
         $reservation->setSeance($seance);
         $reservation->setOwner($user);
+        $reservation->setCreatedAt(new \DateTimeImmutable());
 
         foreach ($sieges as $siege) {
             $siege->setReserve(true);
@@ -131,6 +139,9 @@ final class ReservationController extends AbstractController
         if (!$this->getUser()) {
             return new JsonResponse(['error' => 'Unauthorized'], 401);
         }
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        }
 
         $data = json_decode($request->getContent(), true);
         $siegesIds = $data['sieges'] ?? [];
@@ -139,7 +150,6 @@ final class ReservationController extends AbstractController
             return new JsonResponse(['error' => 'No seats selected'], 400);
         }
 
-        // Récupérer les sièges demandés
         $sieges = $entityManager->getRepository(Siege::class)->findBy(['id' => $siegesIds]);
 
         foreach ($sieges as $siege) {
@@ -151,6 +161,7 @@ final class ReservationController extends AbstractController
         $reservation = new Reservation();
         $reservation->setSeance($seance);
         $reservation->setOwner($this->getUser());
+        $reservation->setCreatedAt(new \DateTimeImmutable());
 
         foreach ($sieges as $siege) {
             $siege->setReserve(true);
@@ -167,6 +178,54 @@ final class ReservationController extends AbstractController
             'success' => true,
             'message' => 'Réservation admin enregistrée ',
             'reservationId' => $reservation->getId(),
+        ]);
+    }
+
+    #[Route('/admin/reservations/avenir', name: 'app_reservations_avenir')]
+    public function reservationsAvenir(ReservationRepository $reservationRepository): Response
+    {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $now = new \DateTime();
+
+        $reservations = $reservationRepository->createQueryBuilder('r')
+            ->join('r.seance', 's')
+            ->where('r.owner = :user')
+            ->andWhere(
+                "CONCAT(s.date, ' ', h.horaire) >= :now"
+            )
+            ->join('s.horaire', 'h')
+            ->setParameter('user', $this->getUser())
+            ->setParameter('now', $now->format('Y-m-d H:i:s'))
+            ->orderBy('s.date', 'ASC')
+            ->addOrderBy('h.horaire', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('reservation/avenir.html.twig', [
+            'reservations' => $reservations,
+        ]);
+    }
+
+    #[Route('/admin/reservations/all', name: 'app_reservations_all')]
+    public function reservationsToutes(ReservationRepository $reservationRepository): Response
+    {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $reservations = $reservationRepository->findAll();
+
+        return $this->render('reservation/index.html.twig', [
+            'reservations' => $reservations,
         ]);
     }
 

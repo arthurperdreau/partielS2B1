@@ -10,28 +10,54 @@
             </h1>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <a href="{{ path('app_home') }}" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 hover:bg-neutral-800 transition">
-                    <h2 class="text-2xl font-semibold text-yellow-400 mb-2">📽️ Gestion des Films</h2>
+                <!-- Gestion des Films -->
+                <a href="{{ path('app_admin_film') }}" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 hover:bg-neutral-800 transition">
+                    <h2 class="text-2xl font-semibold text-yellow-400 mb-2">
+                        <i class="bi bi-camera-reels-fill mr-2"></i> Gestion des Films
+                    </h2>
                     <p class="text-neutral-300">Ajouter, modifier ou supprimer les films de l'affiche.</p>
                 </a>
 
+                <!-- Gestion des Séances -->
                 <a href="{{ path('app_seance') }}" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 hover:bg-neutral-800 transition">
-                    <h2 class="text-2xl font-semibold text-yellow-400 mb-2">📅 Gestion des Séances</h2>
+                    <h2 class="text-2xl font-semibold text-yellow-400 mb-2">
+                        <i class="bi bi-calendar-event-fill mr-2"></i> Gestion des Séances
+                    </h2>
                     <p class="text-neutral-300">Planifier les séances de cinéma.</p>
                 </a>
 
+                <!-- Gestion des Horaires -->
                 <a href="{{ path('app_horaire') }}" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 hover:bg-neutral-800 transition">
-                    <h2 class="text-2xl font-semibold text-yellow-400 mb-2">⏰ Gestion des Horaires</h2>
+                    <h2 class="text-2xl font-semibold text-yellow-400 mb-2">
+                        <i class="bi bi-clock-fill mr-2"></i> Gestion des Horaires
+                    </h2>
                     <p class="text-neutral-300">Définir les horaires des séances.</p>
                 </a>
+
+                <!-- Gestion des Utilisateurs -->
                 <a href="{{ path('app_user') }}" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 hover:bg-neutral-800 transition">
-                    <h2 class="text-2xl font-semibold text-yellow-300 mb-2">👤 Gestion des Utilisateurs</h2>
+                    <h2 class="text-2xl font-semibold text-yellow-300 mb-2">
+                        <i class="bi bi-person-fill mr-2"></i> Gestion des Utilisateurs
+                    </h2>
                     <p class="text-gray-300">Administrer les comptes utilisateurs.</p>
                 </a>
+
+                <!-- Gestion des Salles -->
+                <a href="{{ path('app_salle') }}" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 hover:bg-neutral-800 transition">
+                    <h2 class="text-2xl font-semibold text-yellow-300 mb-2">
+                        <i class="bi bi-building-fill mr-2"></i> Gestion des Salles
+                    </h2>
+                    <p class="text-gray-300">Gérer les différentes salles de cinéma.</p>
+                </a>
+
+                <!-- Gestion des Réservations -->
+                <a href="{{ path('app_reservations_avenir') }}" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 hover:bg-neutral-800 transition">
+                    <h2 class="text-2xl font-semibold text-yellow-300 mb-2">
+                        <i class="bi bi-ticket-perforated-fill mr-2"></i> Gestion des Réservations
+                    </h2>
+                    <p class="text-gray-300">Consulter et gérer les réservations des clients.</p>
+                </a>
             </div>
-
-
-        </div>
         </div>
     </div>
 {% endblock %}
