@@ -214,7 +214,7 @@ final class SeanceController extends AbstractController
 
 
 
-    #[Route('/seance/supprimer/{id}', name: 'app_seance_delete', methods: ['POST'])]
+    #[Route('/seance/supprimer/{id}', name: 'app_seance_delete')]
     public function delete(Request $request, Seance $seance, EntityManagerInterface $entityManager): Response
     {
         if(!$this->getUser()){

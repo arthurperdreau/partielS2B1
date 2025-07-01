@@ -13,12 +13,11 @@
                 <a href="{{ path('app_salle_edit', {id: salle.id}) }}" class="bg-yellow-500 hover:bg-yellow-600 text-neutral-900 px-4 py-2 rounded">
                     Modifier
                 </a>
-                <form method="post" action="{{ path('app_salle_delete', {id: salle.id}) }}" >
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ salle.id) }}">
-                    <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
-                        Supprimer
-                    </button>
-                </form>
+                <a href="{{ path('app_salle_delete', {id: salle.id}) }}"
+                   class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded inline-block">
+                    Supprimer
+                </a>
+
             </div>
 
             <a href="{{ path('app_salle') }}" class="block text-center text-neutral-400 text-sm mt-6 hover:underline">

@@ -51,4 +51,23 @@ class ReservationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function reservationAVenir($user):array
+    {
+        $now = new \DateTime();
+
+        return $this->createQueryBuilder('r')
+            ->join('r.seance', 's')
+            ->where('r.owner = :user')
+            ->andWhere(
+                "CONCAT(s.date, ' ', h.horaire) >= :now"
+            )
+            ->join('s.horaire', 'h')
+            ->setParameter('user', $user)
+            ->setParameter('now', $now->format('Y-m-d H:i:s'))
+            ->orderBy('s.date', 'ASC')
+            ->addOrderBy('h.horaire', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+    }
 }

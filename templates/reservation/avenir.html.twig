@@ -21,6 +21,7 @@
                         <th class="px-4 py-3 border border-neutral-700">Prix</th>
                         <th class="px-4 py-3 border border-neutral-700">Client</th>
                         <th class="px-4 py-3 border border-neutral-700">Date de réservation</th>
+                        <th class="px-4 py-3 border border-neutral-700">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -33,7 +34,15 @@
                             <td class="px-4 py-3 border border-neutral-700">{{ reservation.nombreTickets }}</td>
                             <td class="px-4 py-3 border border-neutral-700">{{ reservation.prix }} €</td>
                             <td class="px-4 py-3 border border-neutral-700">{{ reservation.owner.email }}</td>
-                            <td class="px-4 py-3 border border-neutral-700">{{ reservation.createdAt ? reservation.createdAt|date('d/m/Y H:i') : 'N/A' }}</td>
+                            <td class="px-4 py-3 border border-neutral-700">
+                                {{ reservation.createdAt ? reservation.createdAt|date('d/m/Y H:i') : 'N/A' }}
+                            </td>
+                            <td class="px-4 py-3 border border-neutral-700">
+                                <a href="{{ path('app_reservation_annuler', {'id': reservation.id}) }}"
+                                   class="text-red-500 hover:underline">
+                                    Annuler
+                                </a>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>

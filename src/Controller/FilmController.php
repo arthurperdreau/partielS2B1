@@ -74,7 +74,7 @@ final class FilmController extends AbstractController
         ]);
     }
 
-    #[Route('/film/supprimer/{id}', name: 'app_film_delete', methods: ['POST'])]
+    #[Route('/film/supprimer/{id}', name: 'app_film_delete')]
     public function delete(Request $request, Film $film, EntityManagerInterface $entityManager): Response
     {
         if(!$this->getUser()){

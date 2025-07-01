@@ -193,19 +193,7 @@ final class ReservationController extends AbstractController
 
         $now = new \DateTime();
 
-        $reservations = $reservationRepository->createQueryBuilder('r')
-            ->join('r.seance', 's')
-            ->where('r.owner = :user')
-            ->andWhere(
-                "CONCAT(s.date, ' ', h.horaire) >= :now"
-            )
-            ->join('s.horaire', 'h')
-            ->setParameter('user', $this->getUser())
-            ->setParameter('now', $now->format('Y-m-d H:i:s'))
-            ->orderBy('s.date', 'ASC')
-            ->addOrderBy('h.horaire', 'ASC')
-            ->getQuery()
-            ->getResult();
+        $reservations = $reservationRepository->reservationAVenir($this->getUser());
 
         return $this->render('reservation/avenir.html.twig', [
             'reservations' => $reservations,
@@ -229,6 +217,51 @@ final class ReservationController extends AbstractController
         ]);
     }
 
+    #[Route('/reservation/{id}/annuler', name: 'app_reservation_annuler')]
+    public function annulerReservation(
+        Reservation $reservation,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        if ($reservation->getOwner() !== $user && !in_array('ROLE_ADMIN', $user->getRoles())) {
+            $this->redirectToRoute('app_login');
+        }
+
+
+        $seanceDateTime = new \DateTimeImmutable(
+            $reservation->getSeance()->getDate()->format('Y-m-d') . ' ' .
+            $reservation->getSeance()->getHoraire()->getHoraire()->format('H:i:s')
+        );
+
+        $now = new \DateTimeImmutable();
+        $interval = $seanceDateTime->getTimestamp() - $now->getTimestamp();
+
+        //vérifier si la scéance est déjà passée
+        if ($interval <= 0) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        // 600s=10min
+        if ($interval <= 600) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        foreach ($reservation->getSieges() as $siege) {
+            $siege->setReserve(false);
+        }
+
+        $entityManager->remove($reservation);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Votre réservation a bien été annulée.');
+
+        return $this->redirectToRoute('app_home');
+    }
 
 
 

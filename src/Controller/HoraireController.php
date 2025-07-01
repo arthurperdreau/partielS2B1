@@ -78,7 +78,7 @@ final class HoraireController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/horaire/supprimer/{id}', name: 'app_horaire_delete', methods: ['POST'])]
+    #[Route('/admin/horaire/supprimer/{id}', name: 'app_horaire_delete')]
     public function delete(Request $request, Horaire $horaire, EntityManagerInterface $entityManager): Response
     {
         if(!$this->getUser()){

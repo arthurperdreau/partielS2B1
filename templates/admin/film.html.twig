@@ -35,14 +35,11 @@
                                    class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md">
                                     Modifier
                                 </a>
-                                <form method="post" action="{{ path('app_film_delete', {id: film.id}) }}"
-                                >
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ film.id) }}">
-                                    <button type="submit"
-                                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md">
-                                        Supprimer
-                                    </button>
-                                </form>
+                                <a href="{{ path('app_film_delete', {id: film.id}) }}"
+                                   class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md">
+                                    Supprimer
+                                </a>
+
                             </div>
                         </div>
                     </div>

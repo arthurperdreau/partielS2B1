@@ -93,7 +93,6 @@
                     .map(cb => cb.value);
 
                 if (checkedSieges.length === 0) {
-                    alert('Veuillez sélectionner au moins un siège.');
                     return;
                 }
 
@@ -111,7 +110,6 @@
                         return stripe.redirectToCheckout({ sessionId: data.id });
                     })
                     .catch(error => {
-                        console.error('Erreur:', error);
                         alert('Une erreur est survenue.');
                     });
             });
@@ -135,7 +133,6 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert(data.message);
                             window.location.href = "{{ path('app_seance') }}";
                         } else {
                             alert('Erreur: ' + (data.error || 'Erreur inconnue'));

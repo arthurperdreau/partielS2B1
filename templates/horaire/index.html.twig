@@ -28,14 +28,11 @@
                         <td class="px-4 py-3 space-x-4">
                             <a href="{{ path('app_horaire_edit', {id: horaire.id}) }}"
                                class="text-yellow-400 hover:underline">Modifier</a>
-                            <form method="post" action="{{ path('app_horaire_delete', {id: horaire.id}) }}"
-                                  class="inline-block">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ horaire.id) }}">
-                                <button type="submit" class="text-red-500 hover:underline"
-                                        >
-                                    Supprimer
-                                </button>
-                            </form>
+                            <a href="{{ path('app_horaire_delete', {id: horaire.id}) }}"
+                               class="text-red-500 hover:underline inline-block">
+                                Supprimer
+                            </a>
+
                         </td>
                     </tr>
                 {% else %}
