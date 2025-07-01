@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Film;
 use App\Entity\Seance;
+use App\Entity\Siege;
 use App\Form\SeanceForm;
 use App\Repository\SeanceRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -85,6 +87,18 @@ final class SeanceController extends AbstractController
                 $this->addFlash('error', 'Une séance existe déjà dans cette salle à cette date et à cet horaire.');
                 return $this->redirectToRoute('app_seance_create');
             }
+            if ($salle) {
+                $nombreDePlaces = $salle->getPlace();
+
+                for ($i = 1; $i <= $nombreDePlaces; $i++) {
+                    $siege = new Siege();
+                    $siege->setNumero($i);
+                    $seance->addSiege($siege);
+
+                }
+            }
+
+
 
             $entityManager->persist($seance);
             $entityManager->flush();
@@ -185,5 +199,17 @@ final class SeanceController extends AbstractController
 
         return $this->redirectToRoute('app_seance', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/film/seances/{id}', name: 'app_film_seance', methods: ['GET'])]
+    public function voirSeance(Film $film, SeanceRepository $seanceRepository): Response
+    {
+        $seances = $seanceRepository->findUpcomingByFilm($film);
+
+        return $this->render('seance/voir.html.twig', [
+            'film' => $film,
+            'seances' => $seances,
+        ]);
+    }
+
 
 }

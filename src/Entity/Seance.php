@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SeanceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,6 +31,25 @@ class Seance
     #[ORM\ManyToOne(inversedBy: 'seances')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Horaire $horaire = null;
+
+    /**
+     * @var Collection<int, Reservation>
+     */
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'seance')]
+    private Collection $reservations;
+
+    /**
+     * @var Collection<int, Siege>
+     */
+    #[ORM\OneToMany(targetEntity: Siege::class, mappedBy: 'seance',cascade: ['persist', 'remove'])]
+    private Collection $sieges;
+
+
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+        $this->sieges = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -94,4 +115,67 @@ class Seance
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setSeance($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getSeance() === $this) {
+                $reservation->setSeance(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection<int, Siege>
+     */
+    public function getSieges(): Collection
+    {
+        return $this->sieges;
+    }
+
+    public function addSiege(Siege $siege): static
+    {
+        if (!$this->sieges->contains($siege)) {
+            $this->sieges->add($siege);
+            $siege->setSeance($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSiege(Siege $siege): static
+    {
+        if ($this->sieges->removeElement($siege)) {
+            // set the owning side to null (unless already changed)
+            if ($siege->getSeance() === $this) {
+                $siege->setSeance(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

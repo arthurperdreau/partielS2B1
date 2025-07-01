@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Film;
 use App\Entity\Seance;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -56,6 +57,27 @@ class SeanceRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function findUpcomingByFilm(Film $film): array
+    {
+        $now = new \DateTime();
+
+        return $this->createQueryBuilder('s')
+            ->join('s.horaire', 'h')
+            ->where('s.film = :film')
+            ->andWhere('
+            (s.date > :today)
+            OR
+            (s.date = :today AND h.horaire > :now)
+        ')
+            ->setParameter('film', $film)
+            ->setParameter('today', $now->format('Y-m-d'))
+            ->setParameter('now', $now->format('H:i:s'))
+            ->orderBy('s.date', 'ASC')
+            ->addOrderBy('h.horaire', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
 }
