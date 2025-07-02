@@ -12,7 +12,7 @@
             <div class="flex overflow-x-auto gap-6 md:grid md:grid-cols-3 md:overflow-visible">
                 {% for film in films %}
                     <div class="flex-shrink-0 w-64 md:w-auto bg-neutral-800 rounded-lg overflow-hidden shadow-md hover:scale-105 transition">
-                        <img src="{{ vich_uploader_asset(film.image, 'imageFile') }}" alt="{{ film.name }}" class="w-full h-52 object-cover">
+                        <img src="{{ vich_uploader_asset(film.image, 'imageFile') }}" alt="{{ film.name }}" class="w-full h-52 ">
                         <div class="p-4">
                             <h2 class="text-xl font-semibold text-yellow-300">{{ film.name }}</h2>
                             <p class="mt-2 text-sm text-neutral-300">{{ film.resume|slice(0, 80) ~ '...' }}</p>
