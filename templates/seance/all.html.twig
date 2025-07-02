@@ -3,42 +3,42 @@
 {% block title %}Séances à venir{% endblock %}
 
 {% block body %}
-    <div class="min-h-screen w-full bg-neutral-900 text-neutral-100 px-6 py-10">
+    <div class="min-h-screen w-full bg-neutral-900 text-neutral-100 px-4 py-10 sm:px-6">
         <div class="max-w-7xl mx-auto">
-            <h1 class="text-4xl font-bold text-yellow-500 mb-10">Séances à venir</h1>
+            <h1 class="text-3xl sm:text-4xl font-bold text-yellow-500 mb-8 sm:mb-10">Séances à venir</h1>
 
             {% if seances is empty %}
                 <p class="text-gray-400">Aucune séance disponible pour le moment.</p>
             {% else %}
                 <div class="overflow-x-auto">
-                    <table class="table-auto w-full border border-neutral-700 border-collapse">
+                    <table class="table-auto w-full border border-neutral-700 border-collapse text-sm sm:text-base">
                         <thead>
-                        <tr class="bg-neutral-800 text-yellow-400 uppercase text-sm">
-                            <th class="border border-neutral-700 px-6 py-4">Film</th>
-                            <th class="border border-neutral-700 px-6 py-4">Date</th>
-                            <th class="border border-neutral-700 px-6 py-4">Horaire</th>
-                            <th class="border border-neutral-700 px-6 py-4">Salle</th>
-                            <th class="border border-neutral-700 px-6 py-4">Action</th>
+                        <tr class="bg-neutral-800 text-yellow-400 uppercase text-xs sm:text-sm">
+                            <th class="border border-neutral-700 px-3 sm:px-6 py-2">Film</th>
+                            <th class="border border-neutral-700 px-3 sm:px-6 py-2">Date</th>
+                            <th class="border border-neutral-700 px-3 sm:px-6 py-2">Horaire</th>
+                            <th class="border border-neutral-700 px-3 sm:px-6 py-2">Salle</th>
+                            <th class="border border-neutral-700 px-3 sm:px-6 py-2">Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for seance in seances %}
                             <tr class="odd:bg-neutral-800 even:bg-neutral-900">
-                                <td class="border border-neutral-700 px-6 py-4 font-semibold">
+                                <td class="border border-neutral-700 px-3 sm:px-6 py-2 font-semibold whitespace-nowrap">
                                     {{ seance.film.name }}
                                 </td>
-                                <td class="border border-neutral-700 px-6 py-4">
+                                <td class="border border-neutral-700 px-3 sm:px-6 py-2 whitespace-nowrap">
                                     {{ seance.date|date('d/m/Y') }}
                                 </td>
-                                <td class="border border-neutral-700 px-6 py-4">
+                                <td class="border border-neutral-700 px-3 sm:px-6 py-2 whitespace-nowrap">
                                     {{ seance.horaire.horaire|date('H:i') }}
                                 </td>
-                                <td class="border border-neutral-700 px-6 py-4">
+                                <td class="border border-neutral-700 px-3 sm:px-6 py-2 whitespace-nowrap">
                                     Salle {{ seance.salle.numero }}
                                 </td>
-                                <td class="border border-neutral-700 px-6 py-4">
+                                <td class="border border-neutral-700 px-3 sm:px-6 py-2 whitespace-nowrap">
                                     <a href="{{ path('app_reservation', {id: seance.id}) }}"
-                                       class="bg-yellow-500 hover:bg-yellow-600 text-neutral-900 font-bold px-4 py-2 rounded transition">
+                                       class="bg-yellow-500 hover:bg-yellow-600 text-neutral-900 font-bold px-3 sm:px-4 py-1.5 rounded transition inline-block text-center">
                                         Réserver
                                     </a>
                                 </td>

@@ -3,52 +3,55 @@
 {% block title %}Mon Profil{% endblock %}
 
 {% block body %}
-    <div class="min-h-screen w-full bg-neutral-900 text-neutral-100 px-6 py-10">
+    <div class="min-h-screen w-full bg-neutral-900 text-neutral-100 px-4 py-10 sm:px-6">
         <div class="max-w-5xl mx-auto">
-            <h1 class="text-4xl font-bold text-yellow-500 mb-8">Mon Profil</h1>
+            <h1 class="text-3xl sm:text-4xl font-bold text-yellow-500 mb-6 sm:mb-8">Mon Profil</h1>
 
-            <div class="mb-10 p-6 bg-neutral-800 rounded-lg shadow-md">
-                <h2 class="text-2xl font-semibold mb-4">Informations personnelles</h2>
-                <p><strong>Email :</strong> {{ app.user.email }}</p>
+            <div class="mb-8 p-6 bg-neutral-800 rounded-lg shadow-md">
+                <h2 class="text-xl sm:text-2xl font-semibold mb-4">Informations personnelles</h2>
+                <p class="text-sm sm:text-base"><strong>Email :</strong> {{ app.user.email }}</p>
             </div>
 
-            <div class="mb-10">
-                <h2 class="text-2xl font-semibold mb-4 text-yellow-400">Mes réservations à venir</h2>
+            <div class="mb-8">
+                <h2 class="text-xl sm:text-2xl font-semibold mb-2 text-yellow-400">Mes réservations à venir</h2>
+                <p class="text-gray-400 text-xs sm:text-sm mb-4 italic">
+                    Vous pouvez annuler une réservation jusqu'à 10 minutes avant le début de la séance.
+                </p>
 
                 {% if reservations is empty %}
-                    <p class="text-gray-400">Vous n'avez aucune réservation à venir.</p>
+                    <p class="text-gray-400 text-sm sm:text-base">Vous n'avez aucune réservation à venir.</p>
                 {% else %}
                     <div class="overflow-x-auto">
-                        <table class="table-auto w-full border border-neutral-700 border-collapse text-neutral-200">
+                        <table class="table-auto w-full border border-neutral-700 border-collapse text-sm sm:text-base">
                             <thead>
-                            <tr class="bg-neutral-800 text-yellow-400">
-                                <th class="border border-neutral-700 px-4 py-2">Film</th>
-                                <th class="border border-neutral-700 px-4 py-2">Séance</th>
-                                <th class="border border-neutral-700 px-4 py-2">Nombre de tickets</th>
-                                <th class="border border-neutral-700 px-4 py-2">Prix total</th>
-                                <th class="border border-neutral-700 px-4 py-2">Places réservées</th>
-                                <th class="border border-neutral-700 px-4 py-2">Date de réservation</th>
-                                <th class="border border-neutral-700 px-4 py-2">Action</th>
+                            <tr class="bg-neutral-800 text-yellow-400 text-xs sm:text-sm">
+                                <th class="border border-neutral-700 px-2 sm:px-4 py-2 whitespace-nowrap">Film</th>
+                                <th class="border border-neutral-700 px-2 sm:px-4 py-2 whitespace-nowrap">Séance</th>
+                                <th class="border border-neutral-700 px-2 sm:px-4 py-2 whitespace-nowrap">Nombre de tickets</th>
+                                <th class="border border-neutral-700 px-2 sm:px-4 py-2 whitespace-nowrap">Prix total</th>
+                                <th class="border border-neutral-700 px-2 sm:px-4 py-2 whitespace-nowrap">Places réservées</th>
+                                <th class="border border-neutral-700 px-2 sm:px-4 py-2 whitespace-nowrap">Date de réservation</th>
+                                <th class="border border-neutral-700 px-2 sm:px-4 py-2 whitespace-nowrap">Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for reservation in reservations %}
                                 <tr class="odd:bg-neutral-900 even:bg-neutral-800">
-                                    <td class="border border-neutral-700 px-4 py-2">{{ reservation.seance.film.name }}</td>
-                                    <td class="border border-neutral-700 px-4 py-2">
+                                    <td class="border border-neutral-700 px-2 sm:px-4 py-2">{{ reservation.seance.film.name }}</td>
+                                    <td class="border border-neutral-700 px-2 sm:px-4 py-2">
                                         {{ reservation.seance.date|date('d/m/Y') }} à {{ reservation.seance.horaire.horaire|date('H:i') }}
                                     </td>
-                                    <td class="border border-neutral-700 px-4 py-2">{{ reservation.nombreTickets }}</td>
-                                    <td class="border border-neutral-700 px-4 py-2">{{ reservation.prix }} €</td>
-                                    <td class="border border-neutral-700 px-4 py-2">
+                                    <td class="border border-neutral-700 px-2 sm:px-4 py-2 text-center">{{ reservation.nombreTickets }}</td>
+                                    <td class="border border-neutral-700 px-2 sm:px-4 py-2 text-center">{{ reservation.prix }} €</td>
+                                    <td class="border border-neutral-700 px-2 sm:px-4 py-2">
                                         {% for siege in reservation.sieges %}
                                             {{ siege.numero }}{% if not loop.last %}, {% endif %}
                                         {% endfor %}
                                     </td>
-                                    <td class="border border-neutral-700 px-4 py-2">
+                                    <td class="border border-neutral-700 px-2 sm:px-4 py-2 whitespace-nowrap">
                                         {{ reservation.createdAt ? reservation.createdAt|date('d/m/Y H:i') : 'N/A' }}
                                     </td>
-                                    <td class="border border-neutral-700 px-4 py-2">
+                                    <td class="border border-neutral-700 px-2 sm:px-4 py-2 whitespace-nowrap text-center">
                                         <a href="{{ path('app_reservation_annuler', {'id': reservation.id}) }}"
                                            class="text-red-500 hover:underline">
                                             Annuler
@@ -62,9 +65,9 @@
                 {% endif %}
             </div>
 
-            <div class="mt-10">
+            <div class="mt-8 sm:mt-10 text-center sm:text-left">
                 <form action="{{ path('app_logout') }}" method="post">
-                    <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-neutral-900 font-bold px-6 py-3 rounded transition">
+                    <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-neutral-900 font-bold px-6 py-3 rounded transition w-full sm:w-auto">
                         Se déconnecter
                     </button>
                 </form>

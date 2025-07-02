@@ -3,11 +3,11 @@
 {% block title %}Inscription - Terrine Bellecour{% endblock %}
 
 {% block body %}
-    <div class="min-h-screen flex items-center justify-center bg-neutral-900">
+    <div class="min-h-screen flex items-center justify-center bg-neutral-900 px-4 sm:px-6 lg:px-8">
 
-        <div class="w-full max-w-md bg-neutral-800 rounded-lg shadow-lg p-8 border border-neutral-700">
+        <div class="w-full max-w-md sm:max-w-lg bg-neutral-800 rounded-lg shadow-lg p-6 sm:p-8 border border-neutral-700">
 
-            <h1 class="text-2xl font-bold text-white text-center mb-6">
+            <h1 class="text-2xl sm:text-3xl font-bold text-white text-center mb-6">
                 Inscription à <span class="text-yellow-400">Terrine Bellecour</span>
             </h1>
 
@@ -21,36 +21,36 @@
 
             {{ form_row(registrationForm.email, {
                 label: 'Adresse email',
-                label_attr: { class: 'text-white mb-1 block' },
+                label_attr: { class: 'text-white mb-1 block text-sm sm:text-base' },
                 attr: {
-                    class: 'w-full px-4 py-2 rounded-md bg-neutral-700 border border-neutral-600 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-yellow-400'
+                    class: 'w-full px-4 py-2 rounded-md bg-neutral-700 border border-neutral-600 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm sm:text-base',
+                    autocomplete: 'email'
                 }
             }) }}
-
 
             {{ form_row(registrationForm.plainPassword, {
                 label: 'Mot de passe',
-                label_attr: { class: 'text-white mb-1 block' },
+                label_attr: { class: 'text-white mb-1 block text-sm sm:text-base' },
                 attr: {
-                    class: 'w-full px-4 py-2 rounded-md bg-neutral-700 border border-neutral-600 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-yellow-400'
+                    class: 'w-full px-4 py-2 rounded-md bg-neutral-700 border border-neutral-600 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm sm:text-base',
+                    autocomplete: 'new-password'
                 }
             }) }}
 
-
             {{ form_row(registrationForm.agreeTerms, {
                 label: "J'accepte les conditions d'utilisation",
-                label_attr: { class: 'text-white' }
+                label_attr: { class: 'text-white text-sm sm:text-base' }
             }) }}
-
 
             <button
                 type="submit"
-                class="w-full bg-yellow-400 text-neutral-900 font-semibold py-2 rounded-md hover:bg-yellow-500 transition"
+                aria-label="Créer mon compte"
+                class="w-full bg-yellow-400 text-neutral-900 font-semibold py-2 rounded-md hover:bg-yellow-500 transition text-sm sm:text-base"
             >
                 Créer mon compte
             </button>
 
-            <p class="text-center text-sm text-neutral-400 mt-4">
+            <p class="text-center text-xs sm:text-sm text-neutral-400 mt-4">
                 Vous avez déjà un compte ?
                 <a href="{{ path('app_login') }}" class="text-yellow-400 hover:underline">Se connecter</a>
             </p>

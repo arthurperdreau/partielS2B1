@@ -3,19 +3,22 @@
 {% block title %}Réservation réussie{% endblock %}
 
 {% block body %}
-    <div class="min-h-screen flex flex-col items-center justify-center bg-neutral-900 text-white p-6">
-        <h1 class="text-4xl font-bold mb-6">Réservation confirmée !</h1>
+    <div class="min-h-screen flex flex-col items-center justify-center bg-neutral-900 text-white p-6 sm:p-10">
 
-        <p class="mb-4">
-            Merci {{ reservation.owner.email }}, votre réservation pour la séance de <strong>{{ reservation.seance.film.name }}</strong> a bien été enregistrée.
+        <h1 class="text-3xl sm:text-4xl font-bold mb-6 text-center">Réservation confirmée !</h1>
+
+        <p class="mb-4 text-center text-sm sm:text-base max-w-lg">
+            Merci <strong>{{ reservation.owner.email }}</strong>, votre réservation pour la séance de
+            <strong>{{ reservation.seance.film.name }}</strong> en salle <strong>{{ reservation.seance.salle.numero }}</strong> a bien été enregistrée.
         </p>
 
-        <p class="mb-4">
-            Nombre de billets : {{ reservation.nombreTickets }}<br>
-            Prix total : {{ reservation.prix }} €
+        <p class="mb-4 text-center text-sm sm:text-base max-w-lg">
+            <span class="block">Nombre de billets : <strong>{{ reservation.nombreTickets }}</strong></span>
+            <span>Prix total : <strong>{{ reservation.prix }} €</strong></span>
         </p>
 
-        <a href="{{ path('app_home') }}" class="mt-6 inline-block bg-yellow-400 text-neutral-900 font-semibold py-2 px-4 rounded hover:bg-yellow-500">
+        <a href="{{ path('app_home') }}"
+           class="mt-6 inline-block bg-yellow-400 text-neutral-900 font-semibold py-2 px-6 rounded hover:bg-yellow-500 transition text-sm sm:text-base text-center">
             Retour aux films
         </a>
     </div>

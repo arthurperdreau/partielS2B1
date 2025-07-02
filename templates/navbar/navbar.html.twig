@@ -8,8 +8,15 @@
             </a>
         </div>
 
+        <!-- BURGER MENU -->
+        <div class="lg:hidden">
+            <button id="burger-btn" class="text-white focus:outline-none">
+                <i class="bi bi-list text-3xl"></i>
+            </button>
+        </div>
+
         <!-- NAVIGATION -->
-        <nav class="flex gap-8 text-sm uppercase font-semibold">
+        <nav id="nav-menu" class="hidden lg:flex gap-8 text-sm uppercase font-semibold">
             <a href="{{ path('app_home') }}" class="hover:text-yellow-400 text-white">Films</a>
             <a href="{{ path('app_all_seance') }}" class="hover:text-yellow-400 text-white">Séances à venir</a>
 
@@ -18,13 +25,13 @@
                 {% if "ROLE_ADMIN" in app.user.roles %}
                     <a href="{{ path('app_admin') }}" class="hover:text-yellow-400 text-white">Admin</a>
                 {% endif %}
-             {% else%}
-                 <a href="{{ path('app_login') }}" class="hover:text-yellow-400 text-white">Se connecter</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="hover:text-yellow-400 text-white">Se connecter</a>
             {% endif %}
         </nav>
 
         <!-- PROFILE -->
-        <div class="flex items-center gap-6">
+        <div class="hidden lg:flex items-center gap-6">
             {% if app.user %}
                 <a href="{{ path('app_profile') }}" class="flex items-center gap-2 hover:text-yellow-400 text-white">
                     <i class="bi bi-person-video text-2xl"></i>
@@ -37,6 +44,31 @@
                 </a>
             {% endif %}
         </div>
+    </div>
 
+    <!-- DROPDOWN MENU (MOBILE) -->
+    <div id="mobile-menu" class="lg:hidden hidden px-6 pb-4">
+        <nav class="flex flex-col gap-4 text-sm uppercase font-semibold">
+            <a href="{{ path('app_home') }}" class="hover:text-yellow-400 text-white">Films</a>
+            <a href="{{ path('app_all_seance') }}" class="hover:text-yellow-400 text-white">Séances à venir</a>
+
+            {% if app.user %}
+                <a href="{{ path('app_profile') }}" class="hover:text-yellow-400 text-white">Profil</a>
+                <a href="{{ path('app_logout') }}" class="hover:text-yellow-400 text-white">Se déconnecter</a>
+                {% if "ROLE_ADMIN" in app.user.roles %}
+                    <a href="{{ path('app_admin') }}" class="hover:text-yellow-400 text-white">Admin</a>
+                {% endif %}
+            {% else %}
+                <a href="{{ path('app_login') }}" class="hover:text-yellow-400 text-white">Se connecter</a>
+            {% endif %}
+        </nav>
     </div>
 </div>
+<script>
+    const burger = document.getElementById('burger-btn');
+    const menu = document.getElementById('mobile-menu');
+
+    burger.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+    });
+</script>
