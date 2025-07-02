@@ -53,8 +53,7 @@
                     >
                 </div>
 
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
+                <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
                 <div class="flex items-center gap-2">
                     <input type="checkbox" name="_remember_me" id="remember_me" class="rounded text-yellow-400 focus:ring-yellow-400">
                     <label for="remember_me" class="text-sm sm:text-base text-white">Se souvenir de moi</label>
